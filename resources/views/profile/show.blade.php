@@ -25,23 +25,24 @@
     @endif
 
     <hr/>
-
-    @foreach( $contentList as $user)
-        <article>
-            <blockquote class="embedly-card">
-                {!! $user->media_url  !!}
-                <h4><a href="{{ $user->content_url }}">{{ $user->title }}</a></h4>
-                    Posted on: {{ $user->created_at }}
-            </blockquote>
-        </article>
-    @endforeach
-    @if ($pageNo >0 && count($contentList)>1 )
-        <div class="button">
-            <a class="pull-left" href="/tropa/{{ $pageNo-1 }}">prev</a>
-        </div>&nbsp;&nbsp;&nbsp; 
-    @endif 
-    @if ($pageNo < ($totalDateCount-1) && count($contentList)>1)
-        <div><a class="pull-left" href="/{{ $username }}/{{ $pageNo+1 }}">next</div> 
+    @if($contentList)
+        @foreach( $contentList as $user)
+            <article>
+                <blockquote class="embedly-card">
+                    {!! $user->media_url  !!}
+                    <h4><a href="{{ $user->content_url }}">{{ $user->title }}</a></h4>
+                        Posted on: {{ $user->created_at }}
+                </blockquote>
+            </article>
+        @endforeach
+        @if ($pageNo >0 && count($contentList)>1 )
+            <div class="button">
+                <a class="pull-left" href="/tropa/{{ $pageNo-1 }}">prev</a>
+            </div>&nbsp;&nbsp;&nbsp;
+        @endif
+        @if ($pageNo < ($totalDateCount-1) && count($contentList)>1)
+            <div><a class="pull-left" href="/{{ $username }}/{{ $pageNo+1 }}">next</div>
+        @endif
     @endif
 
 @stop

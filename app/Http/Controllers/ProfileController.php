@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Profile;
+use App\Post;
 use App\User;
 use Validator;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ use Embedly;
 
 class ProfileController extends Controller
 {
-    public function store( Requests\ProfileRequest $request){
+    public function store( Requests\PostRequest $request){
         $content_url = $request->content_url;
         $q = Embedly::oembed($request->content_url,[
            'maxwidth' => '500'
@@ -43,7 +43,7 @@ class ProfileController extends Controller
             $request['title'] = (( $q->title ) ? $q->title : $content_url );
             $request['type'] = $q->type;
         }
-        Profile::create($request->all());
+        Post::create($request->all());
         return redirect(Auth::user()->username);
     }
 
@@ -51,20 +51,21 @@ class ProfileController extends Controller
         $user = User::where('username',strtolower($name))->first();
         $userid = $user->id;
         $username = $user->username;
-        $usersStatus = $user->status;
+        $usersStatus = $user->posts;
 
-        $dateArray = \DB::table('profiles')
+        $dateArray = \DB::table('posts')
                     ->select(\DB::raw("distinct date(created_at) as create_date"))
                     ->orderBy('created_at','desc')->get();
 
-
-        foreach ( $dateArray as $row ) {
-            $dates[] = get_object_vars($row)['create_date']; 
+        $dates = [];
+        foreach ( $dateArray as $key => $row ) {
+            $dates[$key] = get_object_vars($row)['create_date'];
         }
 
+        $contentList = null;
         $totalDateCount = count($dates);
-        if($pageNo > count($dateArray)) { return view('profile.showerror'); }
-        else $contentList = \DB::select(\DB::raw("select * from profiles where user_id = '$userid' and date(created_at) = '$dates[$pageNo]' order by created_at DESC"));
+        if($pageNo > $totalDateCount) { return view('profile.showerror')->with('errormsg',"404 Not Found"); }
+        elseif($totalDateCount > 0) $contentList = \DB::select(\DB::raw("select * from posts where user_id = '$userid' and date(created_at) = '$dates[$pageNo]' order by created_at DESC"));
 
         return view('profile.show',compact(['contentList','dates','pageNo','totalDateCount','username','userid']));
     }
