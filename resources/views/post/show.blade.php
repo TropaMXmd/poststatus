@@ -87,7 +87,7 @@
                                '_token': $('input[name=_token]').val(),
                            },
                            success: function(response){
-                               console.log(response);
+                               //console.log(response);
                            }
                        });
 

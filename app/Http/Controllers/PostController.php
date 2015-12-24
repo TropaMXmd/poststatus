@@ -19,9 +19,10 @@ use Input;
 class PostController extends Controller
 {
     public function store(Requests\PostRequest $request,$name){
-
-      $content = Post::create($request->all());
-        return view('partials.post',compact('content'));
+        Post::create($request->all());
+        //$comments = null;
+        //return view('partials.show',compact('content','comments'));
+        return redirect()->action('PostController@creatorsPosts');
       //$this->creatorsPosts($name);
     }
 
