@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="_token" content="{{ csrf_token() }}" />
 	<title>Document</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="/css/vendor/font-awesome/css/font-awesome.min.css" >
+	<link rel="stylesheet" href="{{ elixir('output/final.css') }}" >
 </head>
 <body>
 	<nav class="navbar navbar-default">
@@ -16,7 +17,11 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">TestApp</a>
+				@if(Auth::user())
+					<a class="navbar-brand" href="#">{{  ucfirst(Auth::user()->username) }}</a>
+					@else
+					<a class="navbar-brand" href="#">TestApp</a>
+				@endif
 			</div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -46,5 +51,7 @@
 	<div class="container">
 		@yield('content')
 	</div>
+	<script src="{{ elixir('output/scripts.js') }}" ></script>
+	@yield('footerjs')
 </body>
 </html>

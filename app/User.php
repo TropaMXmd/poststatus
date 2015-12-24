@@ -37,9 +37,15 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+    //an user may have many posts
     public function posts(){
         return $this->hasMany('App\Post')
                     ->latest();
+    }
+    //an user may have many comments
+    public function comments(){
+        return $this->hasMany('App\Comment')
+            ->latest();
     }
 
 }

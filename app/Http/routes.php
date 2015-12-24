@@ -20,9 +20,11 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout');
 Route::get('register', 'Auth\AuthController@getRegister');
 Route::post('auth/register', 'Auth\AuthController@postRegister');
 
-Route::post('/update', 'PostController@store');
+Route::post('/{name}', 'PostController@store');
+Route::post('/postcomment', 'PostController@storeComment');
 Route::get('/{name}', 'PostController@creatorsPosts');
 Route::get('/{name}/{id}', 'PostController@creatorsPosts');
+
 //Route::post('register', 'Auth\AuthController@postRegister');
 
 // Route::get('/', function () {

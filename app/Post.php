@@ -16,7 +16,11 @@ class Post extends Model
 
 
     //a status is owned by a user
-    public function postOwner(){
+    public function user(){
         return $this->belongsTo('App\User');
+    }
+    //a post may have many comments
+    public function Comments(){
+        return $this->hasMany('App\Comment');
     }
 }
