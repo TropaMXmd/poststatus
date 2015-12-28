@@ -99,7 +99,7 @@
 //                                'title':title,
 //                                'user_id':$('input[name=user_id]').val(),
 //                                '_token': $('input[name=_token]').val(),
-//                            },
+//                            }, 
 //                            success: function(response){
 //                                $('.loading-img').hide();
 //                                $('.content').prepend(response);
