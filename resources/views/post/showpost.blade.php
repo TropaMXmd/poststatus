@@ -42,8 +42,16 @@
         var username = "{{$name}}";
         var userID = "{{ $userID }}";
         $(document).ready(function(){
-            $('.loading-img').show();
+            $('.page').click(function(){
+                var i=$(this).data("value");
+                console.log(i);
+            });
+            $('body').on('click', '.post-like', function(e) {
+                var post_id = $(this).data("value");
+                console.log(post_id);
+            })
             if ($('.page').length > 0) {
+                $('.loading-img').show();
                 $.ajax({
                     url: username,
                     type: "post",
@@ -58,6 +66,25 @@
                     }
                 });
             }
+
+            $('body').on('click', '.post_comment', function(e) {
+                e.preventDefault(e);
+                var post_id = $(this).attr("data");
+                $.ajax({
+                    url: username+'/storecomment',
+                    type: "post",
+                    data: {
+                        'post_id':post_id,
+                        'comment':$("#comment_"+post_id).val(),
+                        '_token': $('input[name=_token]').val(),
+                    },
+                    success: function(response){
+                        $('#comment_container_'+post_id).append(response);
+                        $("#comment_"+post_id).val('');
+                    }
+                });
+            });
+
             $('#postform').on('submit',function(e){
                 $('.loading-img').show();
                 e.preventDefault(e);
@@ -102,38 +129,14 @@
                             success: function(response){
                                 $('.loading-img').hide();
                                 $('.content').prepend(response);
+                                $("#postbox").val('');
                             }
                         });
 
                     });
                 });
-            })
-
-            $('#commentform').on('submit',function(e){
-                $('.loading-img').show();
-                e.preventDefault(e);
-
-                $.ajax({
-                    url: username+'/storecomment',
-                    type: "post",
-                    data: {
-                        'post_id':$('input[name=post_id]').val(),
-                        'user_id':$('input[name=user_id]').val(),
-                        'comment':$('input[name=comment]').val(),
-                        '_token': $('input[name=_token]').val(),
-                    },
-                    success: function(response){
-                        $('.loading-img').hide();
-                        //$('.comment-box').append(response);
-                    }
-                });
-            })
-
-
-            $(".page").click(function(){
-                var date =$(this).data("value");
-
             });
+
         })
     </script>
 @endsection

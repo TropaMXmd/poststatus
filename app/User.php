@@ -47,13 +47,5 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('App\Comment')
             ->latest();
     }
-    public function getUserName($id){
-        $user = $this->where('id', $id)->first();
-        return $user->username;
-    }
-    public function getUserID($name){
-        $user = $this->where('username', $name)->first();
-        return $user->id;
-    }
 
 }

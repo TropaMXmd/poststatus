@@ -22,9 +22,8 @@ class PostController extends Controller
 {
     //------GET USER ID FROM USERNAME-----
     public function getUserID($name){
-        $user = new User();
-        $userID = $user->getUserID(strtolower($name));
-        return $userID;
+        $user = User::where('username', $name)->first();
+        return $user->id;
     }
 
     //------STORE RECENT POST--------------
@@ -35,10 +34,10 @@ class PostController extends Controller
 
     //------STORE COMMENT-------------------
     public function storeComment(Requests\CommentRequest $request,$name){
-        return $request->all();
-//        Comment::create($request->all());
-//        return redirect($request->username);
-//        return 'yes';
+        $data = $request->all();
+        $data['user_id'] = Auth::user()->id;
+        $comment = Post::find($request->post_id)->comments()->save(Comment::create($data));
+        return View("partials.comment",compact('comment'))->render();
     }
 
     //-----SHOW ALL POSTS ON A SINGLE DAY----
@@ -65,6 +64,7 @@ class PostController extends Controller
             ->select(\DB::raw("distinct date(created_at) as create_date"))
             ->where('user_id',$userID)
             ->orderBy('created_at','desc')->get();
+
         return view('post.showpost',compact('dateObject','name','userID','posts','post'));
     }
 }

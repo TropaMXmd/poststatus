@@ -2,7 +2,7 @@
 
 <div class="form-group">
     {!! Form::label('status','What\'s on your mind? ') !!}
-    {!! Form::text('content_url',null,['class' => 'form-control']) !!}
+    {!! Form::text('content_url',null,['class' => 'form-control',"id"=>"postbox"]) !!}
 </div>
 
 <submitfield>
