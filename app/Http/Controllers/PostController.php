@@ -35,9 +35,10 @@ class PostController extends Controller
 
     //------STORE COMMENT-------------------
     public function storeComment(Requests\CommentRequest $request,$name){
-        //Comment::create($request->all());
-        //return redirect($request->username);
-        return 'yes';
+        return $request->all();
+//        Comment::create($request->all());
+//        return redirect($request->username);
+//        return 'yes';
     }
 
     //-----SHOW ALL POSTS ON A SINGLE DAY----
@@ -49,12 +50,7 @@ class PostController extends Controller
             $posts = $user->posts()->whereDate('created_at', '=', $data['date'])
                 ->orderBy('created_at', 'DESC')->get();;
         }
-        dd($posts);
-//        $posts = Post::where('user_id',$this->getUserID($name))
-//            ->whereDate('created_at', '=', $data['date'])
-//            ->orderBy('created_at', 'DESC')->get();
 
-        //$posts = getPosts($data['date'],$data['userID']);
         return View("partials.posts",compact('posts','name'))->render();
 
     }

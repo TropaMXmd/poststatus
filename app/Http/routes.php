@@ -25,7 +25,7 @@ Route::get('/{name}', 'PostController@creatorsPosts');
 Route::post('/{name}/storepost', 'PostController@storePost');
 Route::post('/{name}/storecomment', 'PostController@storeComment');
 Route::post('/{name}', 'PostController@showPosts');
-Route::get('/{name}/{id}', 'PostController@creatorsPosts');
+Route::get('/{name}', 'PostController@creatorsPosts');
 
 //Route::post('register', 'Auth\AuthController@postRegister');
 
