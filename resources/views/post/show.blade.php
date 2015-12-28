@@ -92,7 +92,6 @@
                            success: function(response){
                               $('.loading-img').hide();
                               $('.content-body').prepend(response);
-                              
                            }
                        });
 

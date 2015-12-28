@@ -21,11 +21,9 @@ use Response;
 class PostController extends Controller
 {
     public function store(Requests\PostRequest $request,$name){
+
         $contentList[] = Post::create($request->all());
-        //$content = $request->all();
-        // foreach ($contentList as $content) {
-        //     dd($content->media_url);
-        // }
+
         $comments = [];
         if(count($contentList) > 0){
             foreach($contentList as $key => $post){
@@ -37,15 +35,8 @@ class PostController extends Controller
 
         $userid = $user->id;
         $username = $user->username;
-        //$comments = null;
-        //return view('partials.show',compact('content','comments'));
-        //return redirect()->action('PostController@creatorsPosts');
-        //return redirect($name);
-        //$html = View::make("partials.post", compact('contentList','comments','username'))->render();
 
-        //return Response::json(['html' => $html]);
         return View("partials.post",compact('contentList','comments','username'))->render();
-      //$this->creatorsPosts($name);
     }
 
     public function storeComment(Requests\CommentRequest $request){
