@@ -24,6 +24,7 @@ Route::get('/{name}', 'PostController@creatorsPosts');
 
 Route::post('/{name}/storepost', 'PostController@storePost');
 Route::post('/{name}/storecomment', 'PostController@storeComment');
+Route::post('/{name}/storelike', 'PostController@storeLike');
 Route::post('/{name}', 'PostController@showPosts');
 Route::get('/{name}', 'PostController@creatorsPosts');
 

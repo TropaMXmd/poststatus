@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Comment;
+use App\Like;
 use App\Post;
 use App\User;
 use Carbon\Carbon;
@@ -38,6 +39,18 @@ class PostController extends Controller
         $data['user_id'] = Auth::user()->id;
         $comment = Post::find($request->post_id)->comments()->save(Comment::create($data));
         return View("partials.comment",compact('comment'))->render();
+    }
+
+    //------STORE LIKE------------------
+    public function storeLike(Request $request,$name){
+        $data = $request->all();
+        $data['user_id'] = Auth::user()->id;
+        $like = new Like();
+        $islike = $like->isLike($data['user_id'] ,$data['post_id'] );
+        if(!$islike){
+            $likeObject = Like::create($data);
+        }
+        //return $islike;
     }
 
     //-----SHOW ALL POSTS ON A SINGLE DAY----

@@ -46,9 +46,29 @@
                 var i=$(this).data("value");
                 console.log(i);
             });
+            function ajaxForLike(post_id,like){
+                $.ajax({
+                    url: username+'/storelike',
+                    type: "post",
+                    data: {
+                        'post_id':post_id,
+                        'like':like,
+                        '_token': $('input[name=_token]').val(),
+                    },
+                    success: function(response){
+                        console.log(response);
+                    }
+                });
+            }
             $('body').on('click', '.post-like', function(e) {
                 var post_id = $(this).data("value");
-                console.log(post_id);
+                var like = true;
+                ajaxForLike(post_id,like);
+            })
+            $('body').on('click', '.post-dislike', function(e) {
+                var post_id = $(this).data("value");
+                var like = false;
+                ajaxForLike(post_id,like);
             })
             if ($('.page').length > 0) {
                 $('.loading-img').show();
