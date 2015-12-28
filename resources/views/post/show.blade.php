@@ -3,13 +3,13 @@
 @section('content')
 
     <h1 style="color:green;">
-        {{ ucfirst ($username) }}'s Profile
+        {{ ucfirst ($name) }}'s Profile
     </h1>
     </br>
-    @if ( Auth::guest() == false && Auth::user()->id == $userid )
+    @if ( Auth::guest() == false && Auth::user()->id == $userID )
         <hr/>
 
-        {!! Form::open(array('url'=> $username ,'method'=>'POST', 'id'=>'postform')) !!}
+        {!! Form::open(array('url'=> $name ,'method'=>'POST', 'id'=>'postform')) !!}
             @include('post.form',['submitButtonText' => 'Share Link'])
         {!! Form::close() !!}
 
@@ -27,7 +27,7 @@
 
     <hr/>
     @if($contentList)
-      <img class="loading-img" src="/images/loading.gif" style="display:none;"></img>
+      <img class="loading-img" src="/images/loading.gif" style="display:none;" />
       <div class="content-body">
       @include('partials.post',compact('content','comments'))
       </div>
@@ -43,7 +43,7 @@
 @endsection
 @section('footerjs')
    <script>
-       var username = "{{$username}}";
+       var username = "{{$name}}";
        $(document).ready(function(){
            $('#postform').on('submit',function(e){
               $('.loading-img').show();

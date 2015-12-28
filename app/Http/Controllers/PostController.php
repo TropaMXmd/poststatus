@@ -20,67 +20,55 @@ use Response;
 
 class PostController extends Controller
 {
-    public function store(Requests\PostRequest $request,$name){
+    //------GET USER ID FROM USERNAME-----
+    public function getUserID($name){
+        $user = new User();
+        $userID = $user->getUserID(strtolower($name));
+        return $userID;
+    }
 
-        $contentList[] = Post::create($request->all());
+    //------STORE RECENT POST--------------
+    public function storePost(Requests\PostRequest $request,$name){
+        $post = Post::create($request->all());
+        return View("partials.post",compact('post','name'))->render();
+    }
 
-        $comments = [];
-        if(count($contentList) > 0){
-            foreach($contentList as $key => $post){
-                $post = Post::find($post->id);
-                $comments[$key] = $post->comments;
-            }
+    //------STORE COMMENT-------------------
+    public function storeComment(Requests\CommentRequest $request,$name){
+        //Comment::create($request->all());
+        //return redirect($request->username);
+        return 'yes';
+    }
+
+    //-----SHOW ALL POSTS ON A SINGLE DAY----
+    public function showPosts(Request $request,$name){
+        $data = $request->all();
+        $user = User::where('username', $name)->first();
+        if($user)
+        {
+            $posts = $user->posts()->whereDate('created_at', '=', $data['date'])
+                ->orderBy('created_at', 'DESC')->get();;
         }
-        $user = User::where('username',strtolower($name))->first();
+        dd($posts);
+//        $posts = Post::where('user_id',$this->getUserID($name))
+//            ->whereDate('created_at', '=', $data['date'])
+//            ->orderBy('created_at', 'DESC')->get();
 
-        $userid = $user->id;
-        $username = $user->username;
+        //$posts = getPosts($data['date'],$data['userID']);
+        return View("partials.posts",compact('posts','name'))->render();
 
-        return View("partials.post",compact('contentList','comments','username'))->render();
     }
 
-    public function storeComment(Requests\CommentRequest $request){
-        Comment::create($request->all());
-        return redirect($request->username);
-    }
+    //------PASS THE DATE TO HOME VIEW-------
+    public function creatorsPosts($name){
+        $posts = null;
+        $post = null;
+        $userID = $this->getUserID($name);
 
-    public function creatorsPosts($name,$pageNo=0){
-
-
-
-//        $user = User::where('username',strtolower($name))->first();
-//        $dt = Carbon::today();
-//        $now = $dt->now()->toDateTimeString();
-//        //dd($user->posts->lists('created_at'));
-//        $status = $user->PullStatusByDateRange($dt->subDay($pageNo)->toDateTimeString(),$now);
-
-        $user = User::where('username',strtolower($name))->first();
-
-        $userid = $user->id;
-        $username = $user->username;
-        $dateArray = \DB::table('posts')
+        $dateObject = \DB::table('posts')
             ->select(\DB::raw("distinct date(created_at) as create_date"))
+            ->where('user_id',$userID)
             ->orderBy('created_at','desc')->get();
-
-        $dates = [];
-        foreach ( $dateArray as $key => $row ) {
-            $dates[$key] = get_object_vars($row)['create_date'];
-        }
-
-        $contentList = null;
-        $totalDateCount = count($dates);
-        if($pageNo > $totalDateCount) { return view('post.showerror')->with('errormsg',"404 Not Found"); }
-        elseif($totalDateCount > 0){
-            $contentList = \DB::select(\DB::raw("select * from posts where user_id = '$userid' and date(created_at) = '$dates[$pageNo]' order by created_at DESC"));
-        }
-        
-        $comments = [];
-        if(count($contentList) > 0){
-            foreach($contentList as $key => $post){
-                $post = Post::find($post->id);
-                $comments[$key] = $post->comments;
-            }
-        }
-        return view('post.show',compact(['contentList','dates','pageNo','totalDateCount','username','userid','comments']));
+        return view('post.showpost',compact('dateObject','name','userID','posts','post'));
     }
 }

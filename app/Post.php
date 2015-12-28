@@ -23,4 +23,10 @@ class Post extends Model
     public function Comments(){
         return $this->hasMany('App\Comment');
     }
+    public function getPosts($date,$userID){
+        $posts = $this->where('user_id',$userID)
+                    ->whereDate('created_at', '=', $date)
+                    ->orderBy('created_at', 'DESC')->get();
+        return $posts;
+    }
 }
