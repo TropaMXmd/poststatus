@@ -1,6 +1,7 @@
 @if($post)
     <article>
         <blockquote class="embedly-card">
+
             {!! $post->media_url  !!}
             <h4><a href="{{ $post->content_url }}">{{ $post->title }}</a></h4>
             Posted on: {{ $post->created_at }}
@@ -17,9 +18,9 @@
                 @endforeach
             @endif
             {{--Comment form--}}
-            {!! Form::open(array('url'=> $name ,'method'=>'POST', 'id'=>'commentform')) !!}
-                @include('post.commentform',['submitButtonText' => 'Comment'])
-            {!! Form::close() !!}
+
+                @include('post.commentform',['submitButtonText' => 'Comment',"post_id"=>$post->id])
+
         </div>
     </article>
 @endif

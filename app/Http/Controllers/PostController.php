@@ -49,12 +49,7 @@ class PostController extends Controller
             $posts = $user->posts()->whereDate('created_at', '=', $data['date'])
                 ->orderBy('created_at', 'DESC')->get();;
         }
-        dd($posts);
-//        $posts = Post::where('user_id',$this->getUserID($name))
-//            ->whereDate('created_at', '=', $data['date'])
-//            ->orderBy('created_at', 'DESC')->get();
 
-        //$posts = getPosts($data['date'],$data['userID']);
         return View("partials.posts",compact('posts','name'))->render();
 
     }
@@ -69,6 +64,7 @@ class PostController extends Controller
             ->select(\DB::raw("distinct date(created_at) as create_date"))
             ->where('user_id',$userID)
             ->orderBy('created_at','desc')->get();
+
         return view('post.showpost',compact('dateObject','name','userID','posts','post'));
     }
 }
