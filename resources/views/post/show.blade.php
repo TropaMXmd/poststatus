@@ -13,6 +13,7 @@
             @include('post.form',['submitButtonText' => 'Share Link'])
         {!! Form::close() !!}
 
+    
         @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <ul>
@@ -26,9 +27,10 @@
 
     <hr/>
     @if($contentList)
-        @foreach( $contentList as $content)
-            @include('partials.post',compact('content'))
-       @endforeach
+      <img class="loading-img" src="/images/loading.gif" style="display:none;"></img>
+      <div class="content-body">
+      @include('partials.post',compact('content','comments'))
+      </div>
        @if ($pageNo >0 && count($contentList)>1 )
            <div class="button">
                <a class="pull-left" href="/tropa/{{ $pageNo-1 }}">prev</a>
@@ -44,6 +46,7 @@
        var username = "{{$username}}";
        $(document).ready(function(){
            $('#postform').on('submit',function(e){
+              $('.loading-img').show();
                e.preventDefault(e);
 
                $.embedly.oembed( $('input[name=content_url]').val() , {
@@ -87,7 +90,9 @@
                                '_token': $('input[name=_token]').val(),
                            },
                            success: function(response){
-                               console.log(response);
+                              $('.loading-img').hide();
+                              $('.content-body').prepend(response);
+                              
                            }
                        });
 

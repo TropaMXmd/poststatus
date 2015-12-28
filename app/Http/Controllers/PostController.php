@@ -15,13 +15,36 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Embedly;
 use Input;
+use View;
+use Response;
 
 class PostController extends Controller
 {
     public function store(Requests\PostRequest $request,$name){
+        $contentList[] = Post::create($request->all());
+        //$content = $request->all();
+        // foreach ($contentList as $content) {
+        //     dd($content->media_url);
+        // }
+        $comments = [];
+        if(count($contentList) > 0){
+            foreach($contentList as $key => $post){
+                $post = Post::find($post->id);
+                $comments[$key] = $post->comments;
+            }
+        }
+        $user = User::where('username',strtolower($name))->first();
 
-      $content = Post::create($request->all());
-        return view('partials.post',compact('content'));
+        $userid = $user->id;
+        $username = $user->username;
+        //$comments = null;
+        //return view('partials.show',compact('content','comments'));
+        //return redirect()->action('PostController@creatorsPosts');
+        //return redirect($name);
+        //$html = View::make("partials.post", compact('contentList','comments','username'))->render();
+
+        //return Response::json(['html' => $html]);
+        return View("partials.post",compact('contentList','comments','username'))->render();
       //$this->creatorsPosts($name);
     }
 
@@ -59,6 +82,7 @@ class PostController extends Controller
         elseif($totalDateCount > 0){
             $contentList = \DB::select(\DB::raw("select * from posts where user_id = '$userid' and date(created_at) = '$dates[$pageNo]' order by created_at DESC"));
         }
+        
         $comments = [];
         if(count($contentList) > 0){
             foreach($contentList as $key => $post){
