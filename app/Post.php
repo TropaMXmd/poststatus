@@ -23,4 +23,12 @@ class Post extends Model
     public function Comments(){
         return $this->hasMany('App\Comment');
     }
+    //a post may have many likes
+    public function Likes(){
+        return $this->hasMany('App\Like')->where('likes.like', '=', true)->get();
+    }
+    //a post may have many dislikes
+    public function Dislikes(){
+        return $this->hasMany('App\Like')->where('likes.like', '=', false)->get();
+    }
 }

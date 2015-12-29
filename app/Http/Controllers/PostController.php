@@ -44,13 +44,35 @@ class PostController extends Controller
     //------STORE LIKE------------------
     public function storeLike(Request $request,$name){
         $data = $request->all();
+        if($data['like'] == "true") $data['like'] = true;
+        else $data['like'] = false;
         $data['user_id'] = Auth::user()->id;
-        $like = new Like();
-        $islike = $like->isLike($data['user_id'] ,$data['post_id'] );
-        if(!$islike){
-            $likeObject = Like::create($data);
+        //CHECK WHETHER LIKED OR DISLIKED AND REACT ACCORDINGLY
+        $likeObject = new Like();
+        $isLike = $likeObject->isLike($data['user_id'],$data['post_id']);
+        $isDislike = $likeObject->isDislike($data['user_id'],$data['post_id']);
+        if(!$isLike && !$isDislike){ //if not liked and not disliked
+            Like::create($data);
+        }elseif($isLike && !$isDislike && $data['like']== true){ //already liked,not disliked,pressed like button
+            //dd("already liked,not disliked,pressed like button");
+            Like::where(['post_id'=>$data['post_id'],'user_id'=>$data['user_id']])->delete();
+        }elseif($isLike && !$isDislike && $data['like']== false){ //already liked,not disliked,but pressed dislike button
+            //dd("already liked,not disliked,but pressed dislike button");
+            Like::where(['post_id'=>$data['post_id'],'user_id'=>$data['user_id']])->update(array('like' => false));
+        }elseif(!$isLike && $isDislike && $data['like']== true){ //not liked,already disliked,but pressed like button
+            //dd("not liked,already disliked,but pressed like button");
+            Like::where(['post_id'=>$data['post_id'],'user_id'=>$data['user_id']])->update(array('like' => true));
+        }elseif(!$isLike && $isDislike && $data['like']== false){ //not liked,already disliked,but pressed dislike button
+            //dd("not liked,already disliked,but pressed dislike button");
+            Like::where(['post_id'=>$data['post_id'],'user_id'=>$data['user_id']])->delete();
         }
-        //return $islike;
+
+        $post = Post::find($data['post_id']);
+        $countLikeDislike = null;
+        $countLikeDislike['likes'] = $post->Likes()->count();
+        $countLikeDislike['dislikes'] = $post->Dislikes()->count();
+        $countLikeDislike['icon_flag'] = $data['like'];
+        return $countLikeDislike;
     }
 
     //-----SHOW ALL POSTS ON A SINGLE DAY----

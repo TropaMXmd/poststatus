@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<meta name="_token" content="{{ csrf_token() }}" />
+	<meta name="csrf-token" content="{{csrf_token()}}"/>
 	<title>Document</title>
 	<link rel="stylesheet" href="/css/vendor/font-awesome/css/font-awesome.min.css" >
 	<link rel="stylesheet" href="{{ elixir('output/final.css') }}" >

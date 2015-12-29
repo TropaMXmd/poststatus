@@ -47,5 +47,8 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('App\Comment')
             ->latest();
     }
-
+    //an user may have many comments
+    public function likes(){
+        return $this->hasMany('App\Like');
+    }
 }
