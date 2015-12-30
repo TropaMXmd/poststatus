@@ -42,8 +42,22 @@
        var userID = "{{ $userID }}";
        $(document).ready(function(){
            $('.page').click(function(){
-               var i=$(this).data("value");
-               console.log(i);
+//               var i=$(this).data("value");
+//               //console.log(i);
+               $('.loading-img').show();
+               $.ajax({
+                   url: username,
+                   type: "post",
+                   data: {
+                       'date': $(this).data("value"),
+                       'userID' : userID,
+                       '_token':$('meta[name=csrf-token]').attr("content"),
+                   },
+                   success: function(response){
+                       $('.loading-img').hide();
+                       $('.content').html(response);
+                   }
+               });
            });
            function ajaxForLike(post_id,like){
                $.ajax({
