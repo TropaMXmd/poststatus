@@ -8,6 +8,10 @@ use App\Like;
 use App\Post;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 use Validator;
 use Illuminate\Http\Request;
 
@@ -19,8 +23,13 @@ use Input;
 use View;
 use Response;
 
+
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        App::setLocale(Session::get('my.locale', Config::get('app.locale')));
+    }
     //------GET USER ID FROM USERNAME-----
     public function getUserID($name){
         $user = User::where('username', $name)->first();
@@ -34,10 +43,29 @@ class PostController extends Controller
     }
 
     //------STORE COMMENT-------------------
+    /**
+     * @param Requests\CommentRequest $request
+     * @param $name
+     * @return mixed
+     */
     public function storeComment(Requests\CommentRequest $request,$name){
         $data = $request->all();
         $data['user_id'] = Auth::user()->id;
         $comment = Post::find($request->post_id)->comments()->save(Comment::create($data));
+
+        //send mail
+        $data = array(
+            'name' => "Learning Laravel",
+        );
+
+        Mail::send('email.welcome', $data, function ($message) {
+
+            $message->from('developer.ewmgl@gmail.com', 'Learning Laravel');
+
+            $message->to('tropa.mahmood@gmail.com')->subject('Learning Laravel test email');
+
+        });
+
         return View("partials.comment",compact('comment'))->render();
     }
 

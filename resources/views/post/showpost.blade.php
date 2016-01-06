@@ -3,14 +3,14 @@
 @section('content')
 
     <h1 style="color:green;">
-        {{ ucfirst ($name) }}'s Profile
+        {{ trans('locale.profiletitle', ['name' =>  ucfirst ($name) ]) }}
     </h1>
     </br>
     @if ( Auth::guest() == false && Auth::user()->id == $userID )
         <hr/>
 
         {!! Form::open(array('url'=> $name ,'method'=>'POST', 'id'=>'postform')) !!}
-        @include('post.form',['submitButtonText' => 'Share Link'])
+        @include('post.form',['submitButtonText' => trans('locale.sharelink')])
         {!! Form::close() !!}
 
 
@@ -84,11 +84,11 @@
                        }
 
                        if(response['likes'] > 0 && response['dislikes'] > 0){
-                           $('.showlikes').html("<a >"+response['likes']+" Likes</a><a> ,"+response['dislikes']+" Dislikes</a>");
+                           $('.showlikes').html("<a >"+response['likes']+" {{ trans('locale.likes') }}</a><a> ,"+response['dislikes']+"{{ trans('locale.dislikes') }}</a>");
                        }else if(response['likes'] > 0 && response['dislikes'] == 0){
-                           $('.showlikes').html("<a >"+response['likes']+" Likes</a>");
+                           $('.showlikes').html("<a >"+response['likes']+" {{ trans('locale.likes') }}</a>");
                        }else if(response['likes'] == 0 && response['dislikes'] > 0){
-                           $('.showlikes').html("<a >"+response['dislikes']+" Dislikes</a>");
+                           $('.showlikes').html("<a >"+response['dislikes']+" {{ trans('locale.dislikes') }}</a>");
                        }else if(response['likes'] == 0 && response['dislikes'] == 0){
                            $('.showlikes').html('');
                        }

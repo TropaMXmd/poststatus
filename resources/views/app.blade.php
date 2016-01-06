@@ -31,11 +31,11 @@
 
 				<ul class="nav navbar-nav navbar-right">
 					@if (Auth::guest())
-						<li><a href="{{ url('/') }}">Login</a></li>
-						<li><a href="{{ url('/register') }}">Register</a></li>
+						<li><a href="{{ url('/') }}">{{ trans('locale.login') }}</a></li>
+						<li><a href="{{ url('/register') }}">{{ trans('locale.signup') }}</a></li>
 					@else
 						<ul class="nav navbar-nav">
-							<li><a style="color:red" href="{{ url('/auth/logout') }}">Logout</a></li>
+							<li><a style="color:red" href="{{ url('/auth/logout') }}">{{ trans('locale.logout') }}</a></li>
 						</ul>
 						{{--<li class="dropdown">--}}
 							{{--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>--}}

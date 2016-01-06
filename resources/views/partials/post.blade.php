@@ -7,15 +7,15 @@
         </blockquote>
     @if( Auth::check())
             <hr/>
-        <a class="post-like" data-value="{{ $post->id }}"><i class="fa fa-thumbs-o-up"> Like</i> </a>
-        <a class="post-dislike" data-value="{{ $post->id }}"><i class="fa fa-thumbs-o-down"> Dislike</i></a>
+        <a class="post-like" data-value="{{ $post->id }}"><i class="fa fa-thumbs-o-up"> {{ trans('locale.like') }}</i> </a>
+        <a class="post-dislike" data-value="{{ $post->id }}"><i class="fa fa-thumbs-o-down"> {{ trans('locale.dislike') }}</i></a>
         <div class="comment-box" >
             <div class="showlikes">
                 @if($post->Likes()->count() > 0)
-                    <a>{{ $post->Likes()->count() }} Likes </a>
+                    <a>{{ $post->Likes()->count() }}{{ trans('locale.likes') }} </a>
                 @endif
                 @if( $post->Dislikes()->count() > 0)
-                    <a>, {{ $post->Dislikes()->count() }} Dislikes</a>
+                    <a>, {{ $post->Dislikes()->count() }} {{ trans('locale.dislikes') }}</a>
                 @endif
             </div>
             <hr/>
@@ -30,7 +30,7 @@
             </div>
 
             {{--Comment form--}}
-            @include('post.commentform',['submitButtonText' => 'Comment',"post_id"=>$post->id])
+            @include('post.commentform',['submitButtonText' => trans('locale.comment'),"post_id"=>$post->id])
         </div>
         @endif
 </article>

@@ -1,7 +1,7 @@
 {!! Form::hidden('user_id', Auth::user()->id ) !!}
 
 <div class="form-group">
-    {!! Form::label('status','What\'s on your mind? ') !!}
+    {!! Form::label('status', trans('locale.whatsonyourmind') ) !!}
     {!! Form::text('content_url',null,['class' => 'form-control',"id"=>"postbox"]) !!}
 </div>
 

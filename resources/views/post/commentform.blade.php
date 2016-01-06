@@ -1,5 +1,5 @@
 <div class="form-group">
-    {!! Form::label('comment','Post your comment ') !!}
+    {!! Form::label('comment', trans('locale.postyourcomment')) !!}
     {!! Form::text('comment',null,['class' => 'form-control',"id"=>"comment_{$post_id}"]) !!}
 </div>
 

@@ -28,8 +28,9 @@ Route::post('/{name}/storelike', 'PostController@storeLike');
 Route::post('/{name}', 'PostController@showPosts');
 Route::get('/{name}', 'PostController@creatorsPosts');
 
-//Route::post('register', 'Auth\AuthController@postRegister');
-
-// Route::get('/', function () {
-//     return view('auth.signin');
-// });
+Route::get('lang/{lang}', function($lang)
+{
+    Session::put('my.locale', $lang);
+    return Redirect::to('/');
+    //edit AuthenticatesUsers.php ->getLogin to set locale dynamically - App::setLocale(Session::get('my.locale', Config::get('app.locale')));
+});
